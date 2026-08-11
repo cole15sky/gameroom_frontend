@@ -29,7 +29,7 @@ import type {
   AgentUpdatePayload,
   PlayerCreatePayload,
   PlayerUpdatePayload,
-} from "@/types/user";
+} from "@/types/users";
 
 
 /* =========================================================
