@@ -1,4 +1,4 @@
-export type UserRole = "ADMIN" | "AGENT" | "PLAYER";
+export type Role = "ADMIN" | "AGENT" | "PLAYER";
 
    // BASE USER
 
@@ -8,7 +8,7 @@ export type User = {
   username: string;
   full_name: string | null;
   profile_pic: string | null;
-  role: UserRole;
+  role: Role;
   phone: string;
   is_active: boolean;
   date_joined?: string;

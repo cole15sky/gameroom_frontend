@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 
-import type { AgentCreatePayload } from "@/types/user";
+import type { AgentCreatePayload } from "@/types/users";
 
 type AgentFormProps = {
   onSubmit: (data: AgentCreatePayload) => Promise<void>;
