@@ -3,23 +3,19 @@
 import { useEffect } from "react";
 import { useAuth } from "@/features/auth/context";
 import { useRouter, usePathname } from "next/navigation";
-import type { Role } from "@/types/users";
 
 type Props = {
   children: React.ReactNode;
-  allowedRoles?: Role[];
+  allowedRoles?: string[];
 };
 
-const ROLE_ROUTES: Record<Role, string> = {
+const ROLE_ROUTES: Record<string, string> = {
   ADMIN: "/dashboard/admin",
-  AGENT: "/dashboard/agent",
-  PLAYER: "/dashboard/player",
+  STAFF: "/dashboard/agent",
+  CUSTOMER: "/dashboard/player",
 };
 
-export default function ProtectedRoute({
-  children,
-  allowedRoles,
-}: Props) {
+export default function ProtectedRoute({ children, allowedRoles }: Props) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -27,59 +23,28 @@ export default function ProtectedRoute({
   useEffect(() => {
     if (loading) return;
 
-    // Not authenticated
     if (!user) {
       const next = encodeURIComponent(pathname);
-
       router.replace(`/login?next=${next}`);
       return;
     }
 
-    // Authenticated but wrong role
-    if (
-      allowedRoles &&
-      !allowedRoles.includes(user.role)
-    ) {
-      const target =
-        ROLE_ROUTES[user.role] || "/login";
-
+    if (allowedRoles && !allowedRoles.includes(user.role)) {
+      const target = ROLE_ROUTES[user.role] || "/login";
       router.replace(target);
     }
-  }, [
-    user,
-    loading,
-    router,
-    pathname,
-    allowedRoles,
-  ]);
+  }, [user, loading, router, allowedRoles, pathname]);
 
-  // Loading authentication state
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-
-          <p className="text-sm text-slate-400">
-            Checking authentication...
-          </p>
-        </div>
+      <div className="min-h-screen bg-[#0A0C14] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
-  // Not authenticated
-  if (!user) {
-    return null;
-  }
-
-  // Wrong role
-  if (
-    allowedRoles &&
-    !allowedRoles.includes(user.role)
-  ) {
-    return null;
-  }
+  if (!user) return null;
+  if (allowedRoles && !allowedRoles.includes(user.role)) return null;
 
   return <>{children}</>;
 }

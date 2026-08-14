@@ -1,78 +1,121 @@
 export type Role = "ADMIN" | "AGENT" | "PLAYER";
 
-// BASE USER
+   // BASE USER
+
 export type User = {
   id: number;
   email: string;
   username: string;
-  full_name?: string | null;
+  full_name: string | null;
+  profile_pic: string | null;
   role: Role;
-  phone?: string | null;
-  profile_pic?: string | null;
+  phone: string;
   is_active: boolean;
   date_joined?: string;
 };
 
 
-// AGENT
+   // AGENT
 
-export type Agent = User & {
-  role: "AGENT";
+export type Agent = {
+  id: number;
 
-  gameroom_username: string;
-  gameroom_id?: number | null;
-  balance: string;
-  agent_is_active: boolean;
-};
+  user: number;
 
-
-// PLAYER
-
-export type Player = User & {
-  role: "PLAYER";
+  email: string;
+  username: string;
+  full_name: string | null;
+  profile_pic: string | null;
+  phone: string;
 
   gameroom_username: string;
-  gameroom_id?: number | null;
+  gameroom_id: number | null;
+  gameroom_token?: string | null;
+  token_expires_at?: string | null;
+
   balance: string;
-  agent_id: number;
-  player_is_active?: boolean;
+  is_active: boolean;
+
+  created_at: string;
+  updated_at: string;
 };
 
+   // PLAYER
 
-// AGENT CREATE
+export type Player = {
+  id: number;
+
+  user: number;
+
+  email: string;
+  username: string;
+  full_name: string | null;
+  profile_pic: string | null;
+  phone: string;
+
+  agent: number;
+  agent_username?: string;
+
+  gameroom_username: string;
+  gameroom_id: number | null;
+
+  balance: string;
+  is_active: boolean;
+
+  created_at: string;
+  updated_at: string;
+};
+
+   // CREATE AGENT
 
 export type AgentCreatePayload = {
   email: string;
   username: string;
-  full_name?: string;
   password: string;
+
+  full_name?: string;
   phone?: string;
-  profile_pic?: string;
+
   gameroom_username: string;
 };
 
+   // UPDATE AGENT
 
-// PLAYER CREATE
+export type AgentUpdatePayload = {
+  email?: string;
+  username?: string;
+  full_name?: string;
+  phone?: string;
+
+  gameroom_username?: string;
+
+  is_active?: boolean;
+};
+
+   // CREATE PLAYER
 
 export type PlayerCreatePayload = {
   email: string;
   username: string;
-  full_name?: string;
   password: string;
-  phone?: string;
-  profile_pic?: string;
-  gameroom_username: string;
 
-  // Required when ADMIN creates a Player.
-  // Not required when AGENT creates a Player.
-  agent_id?: number;
+  full_name?: string;
+  phone?: string;
+
+  agent: number;
+  gameroom_username: string;
 };
 
-// ---------------------------------------------
-// API RESPONSE
-// ---------------------------------------------
+   // UPDATE PLAYER
 
-export type ApiResponse<T> = {
-  message: string;
-  data: T;
+export type PlayerUpdatePayload = {
+  email?: string;
+  username?: string;
+  full_name?: string;
+  phone?: string;
+
+  agent?: number;
+  gameroom_username?: string;
+
+  is_active?: boolean;
 };
